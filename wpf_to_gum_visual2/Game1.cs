@@ -34,7 +34,7 @@ namespace wpf_to_gum
 
         protected override void Initialize()
         {
-            Gum.Initialize(this);
+            Gum.Initialize(this, DefaultVisualsVersion.V2);
 
             // Create the main panel that everything is added to
             var mainPanel = new StackPanel();
