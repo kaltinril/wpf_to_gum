@@ -68,14 +68,14 @@ namespace wpf_to_gum
             TextBlockWPFConverted(mainPanelLeft);
             TextBoxInlineFormatting(mainPanelLeft);
             TextBoxTutorial(mainPanelLeft);
+            ButtonTutorial(mainPanelLeft);
 
-            ButtonTutorial(mainPanelMiddle);
             CheckBoxTutorial(mainPanelMiddle);
+            RadioButtonTutorial(mainPanelMiddle);
 
-            RadioButtonTutorial(mainPanelRight);
             PasswordBoxTutorial(mainPanelRight);
-
             MultilinTextBoxTutorial(mainPanelRight);
+            ComboBoxExamples(mainPanelRight);
 
             Styling.Colors.Primary = new Color(255, 0, 0);
 
@@ -465,6 +465,7 @@ namespace wpf_to_gum
             var checkboxTwoEnableAll = new CheckBox();
             checkboxTwoEnableAll.Text = "[Color=DarkSlateGray]Enable feature XYZ[/Color]";
             checkboxTwoEnableAll.IsChecked = true;
+            checkboxTwoEnableAll.IsFocused = true;
             checkboxTwoEnableAll.Visual.Width = 210;
             checkboxTwoEnableAll.Visual.X = 20;
             checkboxPanelEnableAll.AddChild(checkboxTwoEnableAll);
@@ -780,6 +781,29 @@ namespace wpf_to_gum
             };
         }
 
+        public void ComboBoxExamples(StackPanel panelToAddTo)
+        {
+            var comboPanel = new StackPanel();
+            comboPanel.Spacing = 2;
+            panelToAddTo.AddChild(comboPanel);
+
+            var listBox = new ListBox();
+            listBox.Items.Add("Item1");
+            listBox.Items.Add("Item2");
+            listBox.Items.Add("Item3");
+            listBox.Items.Add("Item4");
+            listBox.Items.Add("Item5");
+            listBox.Items.Add("Item6");
+            comboPanel.AddChild(listBox);
+
+            var combo = new ComboBox();
+            combo.Items.Add("Potion");
+            combo.Items.Add("Fenix Down");
+            combo.Items.Add("Elixir");
+            comboPanel.AddChild(combo);
+
+
+        }
 
         private void ApplyStateMagicColors(FrameworkElement textbox)
         {
@@ -811,7 +835,7 @@ namespace wpf_to_gum
                 textboxVisual.FocusedIndicator.Visible = true;
             };
 
-            textbox.IsFocused = true;
+            //textbox.IsFocused = true;
 
 
             textbox.UpdateState();
@@ -820,7 +844,7 @@ namespace wpf_to_gum
 
         private void ApplyStateChangesToButton(Button button, Color fontColor, Color enabledBackColor)
         {
-            button.IsFocused = true; // Testing the visual for this, not needed
+            //button.IsFocused = true; // Testing the visual for this, not needed
 
             var buttonVisual = (ButtonVisual)button.Visual;
 
