@@ -77,7 +77,7 @@ namespace wpf_to_gum
             MultilinTextBoxTutorial(mainPanelRight);
             ComboBoxExamples(mainPanelRight);
 
-            Styling.Colors.Primary = new Color(255, 0, 0);
+            //Styling.Colors.Primary = new Color(255, 0, 0);
 
             base.Initialize();
         }
@@ -787,6 +787,11 @@ namespace wpf_to_gum
             comboPanel.Spacing = 2;
             panelToAddTo.AddChild(comboPanel);
 
+            var leftToRight = new StackPanel();
+            leftToRight.Spacing = 20;
+            leftToRight.Visual.ChildrenLayout = ChildrenLayout.LeftToRightStack;
+            comboPanel.AddChild(leftToRight);
+
             var listBox = new ListBox();
             listBox.Items.Add("Item1");
             listBox.Items.Add("Item2");
@@ -794,7 +799,20 @@ namespace wpf_to_gum
             listBox.Items.Add("Item4");
             listBox.Items.Add("Item5");
             listBox.Items.Add("Item6");
-            comboPanel.AddChild(listBox);
+            leftToRight.AddChild(listBox);
+
+            var listBox2 = new ListBox();
+            listBox2.Items.Add("Item 1");
+            leftToRight.AddChild(listBox2);
+
+            var button = new Button();
+            button.Text = "Click to add";
+            leftToRight.AddChild(button);
+
+            button.Click += (sender, args) =>
+            {
+                listBox2.Items.Add("Item " + (listBox2.Items.Count + 1));
+            };
 
             var combo = new ComboBox();
             combo.Items.Add("Potion");
@@ -802,7 +820,7 @@ namespace wpf_to_gum
             combo.Items.Add("Elixir");
             comboPanel.AddChild(combo);
 
-
+            panelToAddTo.UpdateState();
         }
 
         private void ApplyStateMagicColors(FrameworkElement textbox)
