@@ -76,6 +76,7 @@ namespace wpf_to_gum
             PasswordBoxTutorial(mainPanelRight);
             MultilinTextBoxTutorial(mainPanelRight);
             ComboBoxExamples(mainPanelRight);
+            VisualViwerExamples(mainPanelRight);
 
             //Styling.Colors.Primary = new Color(255, 0, 0);
 
@@ -821,6 +822,49 @@ namespace wpf_to_gum
             comboPanel.AddChild(combo);
 
             panelToAddTo.UpdateState();
+        }
+
+        private void VisualViwerExamples(StackPanel panelToAddTo)
+        {
+            var panel = new StackPanel();
+            panel.Spacing = 2;
+            panelToAddTo.AddChild(panel);
+
+            var leftToRight = new StackPanel();
+            leftToRight.Spacing = 20;
+            leftToRight.Visual.ChildrenLayout = ChildrenLayout.LeftToRightStack;
+            panel.AddChild(leftToRight);
+
+            var scrollViewer = new ScrollViewer();
+            scrollViewer.Width = 300;
+            scrollViewer.Height = 200;
+            scrollViewer.InnerPanel.StackSpacing = 2;
+            leftToRight.AddChild(scrollViewer);
+
+            for (int i = 0; i < 2; i++)
+            {
+                var insideButton = new Button();
+                scrollViewer.AddChild(insideButton);
+                insideButton.Width = 300;
+                insideButton.Text = "Button " + i;
+                insideButton.Click += (_, _) =>
+                    insideButton.Text = DateTime.Now.ToString();
+            }
+
+            var button = new Button();
+            button.Text = "Click to add";
+            leftToRight.AddChild(button);
+
+            button.Click += (sender, args) =>
+            {
+                var insideButton = new Button();
+                scrollViewer.AddChild(insideButton);
+                insideButton.Width = 300;
+                insideButton.Text = "Button " + (scrollViewer.InnerPanel.Children.Count - 1);
+                insideButton.Click += (_, _) =>
+                    insideButton.Text = DateTime.Now.ToString();
+            };
+
         }
 
         private void ApplyStateMagicColors(FrameworkElement textbox)
