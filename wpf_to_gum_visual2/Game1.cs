@@ -2,6 +2,7 @@
 using Gum.DataTypes;
 using Gum.Managers;
 using Gum.Wireframe;
+using GumRuntime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -26,7 +27,7 @@ namespace wpf_to_gum
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = 1200;
+            _graphics.PreferredBackBufferWidth = 2000;
             _graphics.PreferredBackBufferHeight = 1000;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -62,6 +63,10 @@ namespace wpf_to_gum
             mainPanelRight.Spacing = 5;
             leftToRight.AddChild(mainPanelRight);
 
+            var mainPanelFarRight = new StackPanel();
+            mainPanelFarRight.Spacing = 5;
+            leftToRight.AddChild(mainPanelFarRight);
+
             // Perform different WPF like actions
 
             BasicXamlButton(mainPanelLeft);
@@ -77,6 +82,9 @@ namespace wpf_to_gum
             MultilinTextBoxTutorial(mainPanelRight);
             ComboBoxExamples(mainPanelRight);
             VisualViwerExamples(mainPanelRight);
+
+            MenuExamples(mainPanelFarRight);
+            RadioButtonExamples(mainPanelFarRight);
 
             //Styling.Colors.Primary = new Color(255, 0, 0);
 
@@ -731,6 +739,58 @@ namespace wpf_to_gum
             lettersToDisplayTextBox.Width = 250;
             multiLinePanel.AddChild(lettersToDisplayTextBox);
 
+            var lettersVisual = (TextBoxVisual)lettersToDisplayTextBox.Visual;
+
+            //lettersVisual.Background.Color = Styling.Colors.DarkGray;
+            //lettersVisual.SelectionInstance.Color = Color.Red;
+            //lettersVisual.TextInstance.Color = Styling.Colors.White;
+            //lettersVisual.FocusedIndicator.Color = Styling.Colors.Warning;
+            //lettersVisual.FocusedIndicator.Visible = true;
+            //lettersVisual.CaretInstance.Color = Styling.Colors.Primary;
+            //lettersVisual.PlaceholderTextInstance.Visible = false;
+
+            //lettersVisual.States.Focused.Clear();
+            //lettersVisual.States.Focused.Apply = () =>
+            //{
+            //    lettersVisual.Background.Color = Styling.Colors.DarkGray;
+            //    lettersVisual.SelectionInstance.Color = Styling.Colors.Accent;
+            //    lettersVisual.TextInstance.Color = Styling.Colors.White;
+            //    lettersVisual.FocusedIndicator.Color = Styling.Colors.Warning;
+            //    lettersVisual.FocusedIndicator.Visible = true;
+            //    lettersVisual.CaretInstance.Color = Styling.Colors.Primary;
+            //    lettersVisual.PlaceholderTextInstance.Visible = false;
+            //};
+            //lettersVisual.States.Enabled.Apply = () =>
+            //{
+            //    lettersVisual.Background.Color = Styling.Colors.DarkGray;
+            //    lettersVisual.SelectionInstance.Color = Styling.Colors.DarkGray;
+            //    lettersVisual.TextInstance.Color = Styling.Colors.White;
+            //    lettersVisual.FocusedIndicator.Color = Styling.Colors.Warning;
+            //    lettersVisual.FocusedIndicator.Visible = true;
+            //    lettersVisual.CaretInstance.Color = Styling.Colors.Primary;
+            //    lettersVisual.PlaceholderTextInstance.Visible = false;
+            //};
+            //lettersVisual.States.Disabled.Apply = () =>
+            //{
+            //    lettersVisual.Background.Color = Styling.Colors.DarkGray;
+            //    lettersVisual.SelectionInstance.Color = Styling.Colors.Accent;
+            //    lettersVisual.TextInstance.Color = Styling.Colors.White;
+            //    lettersVisual.FocusedIndicator.Color = Styling.Colors.Warning;
+            //    lettersVisual.FocusedIndicator.Visible = true;
+            //    lettersVisual.CaretInstance.Color = Styling.Colors.Primary;
+            //    lettersVisual.PlaceholderTextInstance.Visible = false;
+            //};
+            //lettersVisual.States.Highlighted.Apply = () =>
+            //{
+            //    lettersVisual.Background.Color = Styling.Colors.DarkGray;
+            //    lettersVisual.SelectionInstance.Color = Styling.Colors.Accent;
+            //    lettersVisual.TextInstance.Color = Styling.Colors.White;
+            //    lettersVisual.FocusedIndicator.Color = Styling.Colors.Warning;
+            //    lettersVisual.FocusedIndicator.Visible = true;
+            //    lettersVisual.CaretInstance.Color = Styling.Colors.Primary;
+            //    lettersVisual.PlaceholderTextInstance.Visible = false;
+            //};
+
             var multiLineTextBox = new TextBox();
             multiLineTextBox.TextWrapping = TextWrapping.Wrap;
             multiLineTextBox.Height = 140;
@@ -866,6 +926,59 @@ namespace wpf_to_gum
             };
 
         }
+
+        private void MenuExamples(StackPanel panelToAddTo)
+        {
+            var panel = new StackPanel();
+            panel.Spacing = 2;
+            panel.Visual.Width = 200;
+            panelToAddTo.AddChild(panel);
+
+            var menu = new Menu();
+            panel.AddChild(menu);
+
+            var fileMenuItem = new MenuItem();
+            fileMenuItem.Header = "File";
+            menu.Items.Add(fileMenuItem);
+
+            var openMenuItem = new MenuItem();
+            openMenuItem.Header = "Open";
+            fileMenuItem.Items.Add(openMenuItem);
+
+            var recentFileMenuItem = new MenuItem();
+            recentFileMenuItem.Header = "Recent Items";
+            openMenuItem.Items.Add(recentFileMenuItem);
+
+            var saveMenuItem = new MenuItem();
+            saveMenuItem.Header = "Save";
+            fileMenuItem.Items.Add(saveMenuItem);
+
+            var editMenuItem = new MenuItem();
+            editMenuItem.Header = "Edit";
+            menu.Items.Add(editMenuItem);
+
+
+        }
+        private void RadioButtonExamples(StackPanel panelToAddTo)
+        {
+            var panel = new StackPanel();
+            panel.Spacing = 2;
+            panel.Visual.Width = 200;
+            panelToAddTo.AddChild(panel);
+
+            var radioButton = new RadioButton();
+            radioButton.Text = "Circle2 Icon";
+            radioButton.IsChecked = true;
+            panel.AddChild(radioButton);
+
+            var radioButtonFilled = new RadioButton();
+            radioButtonFilled.Text = "Circle1 Icon";
+            radioButtonFilled.IsChecked = true;
+            var rbv = (RadioButtonVisual)radioButtonFilled.Visual;
+            rbv.InnerCheckbox.ApplyState(IconVisuals.Circle1);
+            panel.AddChild(radioButtonFilled);
+        }
+            
 
         private void ApplyStateMagicColors(FrameworkElement textbox)
         {
