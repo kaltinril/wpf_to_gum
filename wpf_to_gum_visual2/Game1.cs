@@ -85,6 +85,9 @@ namespace wpf_to_gum
 
             MenuExamples(mainPanelFarRight);
             RadioButtonExamples(mainPanelFarRight);
+            WindowExamples(mainPanelFarRight);
+            SliderExamples(mainPanelFarRight);
+            SplitterExamples(mainPanelFarRight);
 
             //Styling.Colors.Primary = new Color(255, 0, 0);
 
@@ -474,7 +477,7 @@ namespace wpf_to_gum
             var checkboxTwoEnableAll = new CheckBox();
             checkboxTwoEnableAll.Text = "[Color=DarkSlateGray]Enable feature XYZ[/Color]";
             checkboxTwoEnableAll.IsChecked = true;
-            checkboxTwoEnableAll.IsFocused = true;
+            //checkboxTwoEnableAll.IsFocused = true;
             checkboxTwoEnableAll.Visual.Width = 210;
             checkboxTwoEnableAll.Visual.X = 20;
             checkboxPanelEnableAll.AddChild(checkboxTwoEnableAll);
@@ -975,10 +978,79 @@ namespace wpf_to_gum
             radioButtonFilled.Text = "Circle1 Icon";
             radioButtonFilled.IsChecked = true;
             var rbv = (RadioButtonVisual)radioButtonFilled.Visual;
-            rbv.InnerCheckbox.ApplyState(IconVisuals.Circle1);
+            rbv.InnerCheckbox.ApplyState(Styling.Icons.Circle1);
             panel.AddChild(radioButtonFilled);
         }
-            
+
+        private void WindowExamples(StackPanel panelToAddTo)
+        {
+            var panel = new StackPanel();
+            panel.Spacing = 2;
+            panel.Visual.Width = 200;
+            panelToAddTo.AddChild(panel);
+
+            var window = new Window();
+            //window.Width = 200;
+            panelToAddTo.AddChild(window);
+
+            var textInstance = new Label();
+            textInstance.Dock(Dock.Top);
+            //textInstance.Anchor(Anchor.Top);
+            textInstance.Y = 24;
+            textInstance.Text = "Hello I am a message box";
+            window.AddChild(textInstance);
+
+            var button = new Button();
+            button.Anchor(Anchor.Bottom);
+            button.Y = -10;
+            button.Text = "Close";
+            window.AddChild(button.Visual);
+            button.Click += (_, _) =>
+            {
+                window.RemoveFromRoot();
+            };
+        }
+
+
+        private void SliderExamples(StackPanel panelToAddTo)
+        {
+            var panel = new StackPanel();
+            panel.Spacing = 2;
+            panel.Visual.Width = 200;
+            panelToAddTo.AddChild(panel);
+
+            var disabledSlider = new Slider();
+            disabledSlider.Value = 33;
+            disabledSlider.Maximum = 100;
+            disabledSlider.IsEnabled = false;
+            panel.AddChild(disabledSlider);
+
+            var slider = new Slider();
+            panel.AddChild(slider);
+
+        }
+
+        private void SplitterExamples(StackPanel panelToAddTo)
+        {
+            var listBox = new ListBox();
+            panelToAddTo.AddChild(listBox);
+            for (int i = 0; i < 10; i++)
+            {
+                listBox.Items.Add("List Item " + i);
+            }
+
+            var splitter = new Splitter();
+            panelToAddTo.AddChild(splitter);
+            splitter.Dock(Dock.FillHorizontally);
+            splitter.Height = 5;
+
+            var listBox2 = new ListBox();
+            panelToAddTo.AddChild(listBox2);
+            for (int i = 0; i < 10; i++)
+            {
+                listBox2.Items.Add("List Item " + i);
+            }
+        }
 
         private void ApplyStateMagicColors(FrameworkElement textbox)
         {
