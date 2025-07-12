@@ -526,7 +526,7 @@ namespace wpf_to_gum
 
 
             var radioLabelSex = new Label();
-            radioLabelSex.Text = "Male or Female?";
+            radioLabelSex.Text = "Gender";
             var checkboxLabelSexTextRuntimeEnableAll = radioLabelSex.GetVisual<TextRuntime>();
             checkboxLabelSexTextRuntimeEnableAll.Color = Color.Black;
             panelToAddTo.AddChild(radioLabelSex);
@@ -544,9 +544,9 @@ namespace wpf_to_gum
             radioButtonSexFemale.Text = "Female";
             radioPanelSex.AddChild(radioButtonSexFemale);
 
-            var radioButtonSexNotSure = new RadioButton();
-            radioButtonSexNotSure.Text = "Not sure";
-            radioPanelSex.AddChild(radioButtonSexNotSure);
+            var radioButtonSexOther = new RadioButton();
+            radioButtonSexOther.Text = "Other";
+            radioPanelSex.AddChild(radioButtonSexOther);
 
 
             var radioLabelStyled = new Label();
