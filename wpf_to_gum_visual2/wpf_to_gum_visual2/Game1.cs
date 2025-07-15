@@ -981,7 +981,7 @@ namespace wpf_to_gum
             radioButtonFilled.Text = "Circle1 Icon";
             radioButtonFilled.IsChecked = true;
             var rbv = (RadioButtonVisual)radioButtonFilled.Visual;
-            rbv.InnerCheckbox.ApplyState(Styling.Icons.Circle1);
+            rbv.InnerCheck.ApplyState(Styling.Icons.Circle1);
             panel.AddChild(radioButtonFilled);
         }
 

@@ -36,6 +36,8 @@ namespace wpf_to_gum
         {
             Gum.Initialize(this);
 
+            FrameworkElement.KeyboardsForUiControl.Add(Gum.Keyboard);
+
             // Create the main panel that everything is added to
             var mainPanel = new StackPanel();
             mainPanel.Visual.X = 10;
