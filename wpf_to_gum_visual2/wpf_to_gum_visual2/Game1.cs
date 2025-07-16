@@ -1,5 +1,6 @@
 ﻿using Gum.Converters;
 using Gum.DataTypes;
+using Gum.DataTypes.Variables;
 using Gum.Managers;
 using Gum.Wireframe;
 using GumRuntime;
@@ -14,6 +15,7 @@ using MonoGameGum.GueDeriving;
 using RenderingLibrary.Graphics;
 using System;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace wpf_to_gum
@@ -22,7 +24,7 @@ namespace wpf_to_gum
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        GumService Gum => GumService.Default;
+        GumService GumUi => GumService.Default;
 
         public Game1()
         {
@@ -35,10 +37,10 @@ namespace wpf_to_gum
 
         protected override void Initialize()
         {
-            Gum.Initialize(this, DefaultVisualsVersion.V2);
+            GumUi.Initialize(this, DefaultVisualsVersion.V2);
 
             
-            FrameworkElement.KeyboardsForUiControl.Add(Gum.Keyboard);
+            FrameworkElement.KeyboardsForUiControl.Add(GumUi.Keyboard);
             //Gum.EnableProjectWideKeyboardSupport();
 
             // Create the main panel that everything is added to
@@ -71,6 +73,10 @@ namespace wpf_to_gum
             mainPanelFarRight.Spacing = 5;
             leftToRight.AddChild(mainPanelFarRight);
 
+            var mainPanelFarRight2 = new StackPanel();
+            mainPanelFarRight2.Spacing = 5;
+            leftToRight.AddChild(mainPanelFarRight2);
+
             // Perform different WPF like actions
 
             BasicXamlButton(mainPanelLeft);
@@ -92,6 +98,9 @@ namespace wpf_to_gum
             WindowExamples(mainPanelFarRight);
             SliderExamples(mainPanelFarRight);
             SplitterExamples(mainPanelFarRight);
+
+            VisualListExample(mainPanelFarRight2);
+
 
             //Styling.Colors.Primary = new Color(255, 0, 0);
 
@@ -1055,6 +1064,116 @@ namespace wpf_to_gum
             }
         }
 
+        private class ItemWithButton : InteractiveGue
+        {
+            public NineSliceRuntime ItemBackground { get; set; }
+            public ButtonVisual ItemBuy { get; set; }
+            public LabelVisual ItemName { get; set; }
+            public SpriteRuntime ItemImage { get; set; }
+            public LabelVisual ItemPrice { get; set;  }
+            public ItemWithButton(string itemName, int itemPrice, StateSave iconCoords) : base(new InvisibleRenderable())
+            {
+                this.Width = 0f;
+                this.WidthUnits = DimensionUnitType.RelativeToParent;
+                this.Height = 0;
+                this.HeightUnits = DimensionUnitType.RelativeToChildren;
+
+                ItemBackground = new NineSliceRuntime();
+                ItemBackground.Texture = Styling.ActiveStyle.SpriteSheet;
+                ItemBackground.Width = 0f;
+                ItemBackground.Height = 0f;
+                ItemBackground.WidthUnits = DimensionUnitType.RelativeToParent;
+                ItemBackground.HeightUnits = DimensionUnitType.RelativeToChildren;
+                ItemBackground.ApplyState(Styling.NineSlice.Panel);
+                ItemBackground.Color = Styling.Colors.PrimaryDark;
+                this.AddChild(ItemBackground);
+
+
+                var panel = new StackPanel();
+                panel.Spacing = 5;
+                panel.Orientation = Orientation.Horizontal;
+                ItemBackground.AddChild(panel);
+
+                ItemBuy = new ButtonVisual();
+                ItemBuy.Name = "ItemBuy";
+                ItemBuy.Width = 100f;
+                ItemBuy.TextInstance.Text = "Buy";
+                panel.AddChild(ItemBuy);
+
+                ItemImage = new SpriteRuntime();
+                ItemImage.Name = "ItemImage";
+                ItemImage.Texture = Styling.ActiveStyle.SpriteSheet;
+                ItemImage.ApplyState(iconCoords);
+                panel.AddChild(ItemImage);
+
+                ItemName = new LabelVisual();
+                ItemName.YOrigin = VerticalAlignment.Center;
+                ItemName.Y = 0f;
+                ItemName.YUnits = GeneralUnitType.PixelsFromMiddle;
+                ItemName.Name = "ItemName";
+                ItemName.Text = itemName;
+                panel.AddChild(ItemName);
+
+                ItemPrice = new LabelVisual();
+                ItemPrice.YOrigin = VerticalAlignment.Center;
+                ItemPrice.Y = 0f;
+                ItemPrice.YUnits = GeneralUnitType.PixelsFromMiddle;
+                ItemPrice.XUnits = GeneralUnitType.PixelsFromSmall;
+                ItemPrice.XOrigin = HorizontalAlignment.Left;
+                ItemPrice.X = 0f;
+                ItemPrice.Name = "ItemPrice";
+                ItemPrice.Text = $"${itemPrice}";
+                panel.AddChild(ItemPrice);
+            }
+        }
+
+        private void VisualListExample(StackPanel panelToAddTo)
+        {
+            var panel = new StackPanel();
+            panel.Spacing = 10;
+            //panel.Visual.Width = 200;
+            panelToAddTo.AddChild(panel);
+
+            var label = new Label();
+            label.Text = "asdfasdf";
+            panel.AddChild(label);
+
+            var leftToRight = new StackPanel();
+            leftToRight.Spacing = 20;
+            leftToRight.Visual.ChildrenLayout = ChildrenLayout.LeftToRightStack;
+            panel.AddChild(leftToRight);
+
+
+
+            var scrollViewer = new ScrollViewer();
+            scrollViewer.Width = 300;
+            scrollViewer.Height = 200;
+            scrollViewer.InnerPanel.StackSpacing = 2;
+            leftToRight.AddChild(scrollViewer);
+
+            for (int i = 0; i < 2; i++)
+            {
+                int price = 100 * (1 + i);
+                var item = new ItemWithButton($"Item {i}", price, Styling.Icons.Battery);
+                item.ItemBuy.Click += (a, b) => { label.Text = item.ItemName.Text; };
+                scrollViewer.AddChild(item);
+            }
+
+            var button = new Button();
+            button.Text = "Click to add";
+            leftToRight.AddChild(button);
+
+            button.Click += (sender, args) =>
+            {
+                int i = (scrollViewer.InnerPanel.Children.Count);
+                int price = 100 * (1 + i);
+                var item = new ItemWithButton($"Item {i}", price, Styling.Icons.Battery);
+                item.ItemBuy.Click += (a, b) => { label.Text = item.ItemName.Text; };
+                scrollViewer.AddChild(item);
+            };
+        }
+
+
         private void ApplyStateMagicColors(FrameworkElement textbox)
         {
             TextBoxBaseVisual textboxVisual = (TextBoxBaseVisual)textbox.Visual;
@@ -1132,7 +1251,7 @@ namespace wpf_to_gum
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            Gum.Update(gameTime);   
+            GumUi.Update(gameTime);   
 
             base.Update(gameTime);
         }
@@ -1141,9 +1260,11 @@ namespace wpf_to_gum
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            Gum.Draw();
+            GumUi.Draw();
 
             base.Draw(gameTime);
         }
     }
+
+
 }
