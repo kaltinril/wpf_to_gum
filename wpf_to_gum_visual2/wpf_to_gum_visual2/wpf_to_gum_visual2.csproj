@@ -28,9 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\git\Gum\GumCommon\GumCommon.csproj" />
-    <ProjectReference Include="C:\git\Gum\GumDataTypes\GumDataTypesNet6.csproj" />
     <ProjectReference Include="C:\git\Gum\MonoGameGum\MonoGameGum.csproj" />
-    <ProjectReference Include="C:\git\Gum\ToolsUtilities\ToolsUtilitiesStandard.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\blue_circle.png">

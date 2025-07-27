@@ -1064,19 +1064,20 @@ namespace wpf_to_gum
             }
         }
 
-        private class ItemWithButton : InteractiveGue
+        private class ItemWithButton : FrameworkElement
         {
             public NineSliceRuntime ItemBackground { get; set; }
             public ButtonVisual ItemBuy { get; set; }
             public LabelVisual ItemName { get; set; }
             public SpriteRuntime ItemImage { get; set; }
             public LabelVisual ItemPrice { get; set;  }
-            public ItemWithButton(string itemName, int itemPrice, StateSave iconCoords) : base(new InvisibleRenderable())
+            public ItemWithButton(string itemName, int itemPrice, StateSave iconCoords) : base()
             {
-                this.Width = 0f;
-                this.WidthUnits = DimensionUnitType.RelativeToParent;
-                this.Height = 0;
-                this.HeightUnits = DimensionUnitType.RelativeToChildren;
+                this.Visual = new MonoGameGum.GueDeriving.ContainerRuntime();
+                this.Visual.Width = 0f;
+                this.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+                this.Visual.Height = 0;
+                this.Visual.HeightUnits = DimensionUnitType.RelativeToChildren;
 
                 ItemBackground = new NineSliceRuntime();
                 ItemBackground.Texture = Styling.ActiveStyle.SpriteSheet;
@@ -1088,11 +1089,16 @@ namespace wpf_to_gum
                 ItemBackground.Color = Styling.Colors.PrimaryDark;
                 this.AddChild(ItemBackground);
 
+                var outerPanel = new Panel();
+                outerPanel.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+                ItemBackground.AddChild(outerPanel);
+                
 
                 var panel = new StackPanel();
                 panel.Spacing = 5;
                 panel.Orientation = Orientation.Horizontal;
-                ItemBackground.AddChild(panel);
+                panel.Visual.WidthUnits = DimensionUnitType.RelativeToChildren;
+                outerPanel.AddChild(panel);
 
                 ItemBuy = new ButtonVisual();
                 ItemBuy.Name = "ItemBuy";
@@ -1118,12 +1124,15 @@ namespace wpf_to_gum
                 ItemPrice.YOrigin = VerticalAlignment.Center;
                 ItemPrice.Y = 0f;
                 ItemPrice.YUnits = GeneralUnitType.PixelsFromMiddle;
-                ItemPrice.XUnits = GeneralUnitType.PixelsFromSmall;
-                ItemPrice.XOrigin = HorizontalAlignment.Left;
-                ItemPrice.X = 0f;
+                ItemPrice.XUnits = GeneralUnitType.PixelsFromLarge;
+                ItemPrice.XOrigin = HorizontalAlignment.Right;
+                ItemPrice.X = -5f;
                 ItemPrice.Name = "ItemPrice";
                 ItemPrice.Text = $"${itemPrice}";
-                panel.AddChild(ItemPrice);
+                ItemPrice.HorizontalAlignment = HorizontalAlignment.Right;
+                ItemPrice.Width = 2f;
+                ItemPrice.WidthUnits = DimensionUnitType.Ratio;
+                outerPanel.AddChild(ItemPrice);
             }
         }
 
