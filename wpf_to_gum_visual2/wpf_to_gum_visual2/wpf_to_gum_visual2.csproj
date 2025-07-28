@@ -27,8 +27,8 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\git\Gum\GumCommon\GumCommon.csproj" />
-    <ProjectReference Include="C:\git\Gum\MonoGameGum\MonoGameGum.csproj" />
+    <ProjectReference Include="..\..\..\Gum\GumCommon\GumCommon.csproj" />
+    <ProjectReference Include="..\..\..\Gum\MonoGameGum\MonoGameGum.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\blue_circle.png">
