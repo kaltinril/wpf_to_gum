@@ -990,7 +990,7 @@ namespace wpf_to_gum
             radioButtonFilled.Text = "Circle1 Icon";
             radioButtonFilled.IsChecked = true;
             var rbv = (RadioButtonVisual)radioButtonFilled.Visual;
-            rbv.InnerCheck.ApplyState(Styling.Icons.Circle1);
+            rbv.InnerCheck.ApplyState(Styling.ActiveStyle.Icons.Circle1);
             panel.AddChild(radioButtonFilled);
         }
 
@@ -1085,8 +1085,8 @@ namespace wpf_to_gum
                 ItemBackground.Height = 0f;
                 ItemBackground.WidthUnits = DimensionUnitType.RelativeToParent;
                 ItemBackground.HeightUnits = DimensionUnitType.RelativeToChildren;
-                ItemBackground.ApplyState(Styling.NineSlice.Panel);
-                ItemBackground.Color = Styling.Colors.PrimaryDark;
+                ItemBackground.ApplyState(Styling.ActiveStyle.NineSlice.Panel);
+                ItemBackground.Color = Styling.ActiveStyle.Colors.PrimaryDark;
                 this.AddChild(ItemBackground);
 
                 var outerPanel = new Panel();
@@ -1163,7 +1163,7 @@ namespace wpf_to_gum
             for (int i = 0; i < 2; i++)
             {
                 int price = 100 * (1 + i);
-                var item = new ItemWithButton($"Item {i}", price, Styling.Icons.Battery);
+                var item = new ItemWithButton($"Item {i}", price, Styling.ActiveStyle.Icons.Battery);
                 item.ItemBuy.Click += (a, b) => { label.Text = item.ItemName.Text; };
                 scrollViewer.AddChild(item);
             }
@@ -1176,7 +1176,7 @@ namespace wpf_to_gum
             {
                 int i = (scrollViewer.InnerPanel.Children.Count);
                 int price = 100 * (1 + i);
-                var item = new ItemWithButton($"Item {i}", price, Styling.Icons.Battery);
+                var item = new ItemWithButton($"Item {i}", price, Styling.ActiveStyle.Icons.Battery);
                 item.ItemBuy.Click += (a, b) => { label.Text = item.ItemName.Text; };
                 scrollViewer.AddChild(item);
             };
