@@ -11,6 +11,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Content.mgcb" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
@@ -28,9 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Gum\GumCommon\GumCommon.csproj" />
-    <ProjectReference Include="..\..\..\Gum\GumDataTypes\GumDataTypesNet6.csproj" />
     <ProjectReference Include="..\..\..\Gum\MonoGameGum\MonoGameGum.csproj" />
-    <ProjectReference Include="..\..\..\Gum\ToolsUtilities\ToolsUtilitiesStandard.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\blue_circle.png">
