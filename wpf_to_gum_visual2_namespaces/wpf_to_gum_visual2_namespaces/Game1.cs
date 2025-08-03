@@ -3,13 +3,13 @@ using Gum.DataTypes;
 using Gum.DataTypes.Variables;
 using Gum.Forms;
 using Gum.Forms.Controls;
+using Gum.Forms.DefaultVisuals;
 using Gum.Managers;
 using Gum.Wireframe;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameGum;
-using MonoGameGum.Forms.DefaultVisuals;
 using MonoGameGum.GueDeriving;
 using RenderingLibrary.Graphics;
 using System;
@@ -1144,7 +1144,7 @@ namespace wpf_to_gum
             panelToAddTo.AddChild(panel);
 
             var label = new Label();
-            label.Text = "asdfasdf";
+            label.Text = "Item Name click appears here";
             panel.AddChild(label);
 
             var leftToRight = new StackPanel();
