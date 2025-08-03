@@ -46,6 +46,9 @@
     <None Update="Content\question_mark.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\quickTexture.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\red_x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

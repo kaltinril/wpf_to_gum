@@ -1138,9 +1138,21 @@ namespace wpf_to_gum
 
         private void VisualListExample(StackPanel panelToAddTo)
         {
+            //var myTexture = Texture2D.FromFile(GraphicsDevice, "Content/quickTexture.png");
+            //var myStyle = new Styling(myTexture);
+            //myStyle.NineSlice.Bordered = Styling.CreateTextureCoordinateState(0, 0, 96, 32, myTexture);
+            //var mySingleTextureRegion = Styling.CreateTextureCoordinateState(96, 48, 32, 32, myTexture);
+
+            //var background = new NineSliceRuntime();
+            //background.ApplyState(Styling.ActiveStyle.NineSlice.Bordered);
+            ////background.Texture = Styling.ActiveStyle.SpriteSheet;
+            //background.Dock(Dock.Fill);
+
             var panel = new StackPanel();
             panel.Spacing = 10;
             //panel.Visual.Width = 200;
+            //panel.AddChild(background);
+            
             panelToAddTo.AddChild(panel);
 
             var label = new Label();
