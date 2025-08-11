@@ -14,6 +14,8 @@ using MonoGameGum.GueDeriving;
 using RenderingLibrary.Graphics;
 using System;
 using System.Diagnostics;
+using System.IO;
+using wpf_to_gum_visual2_namespaces;
 
 
 
@@ -26,6 +28,8 @@ namespace wpf_to_gum
         private SpriteBatch _spriteBatch;
         GumService GumUi => GumService.Default;
 
+        ComparisonItem compareItem;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -33,13 +37,16 @@ namespace wpf_to_gum
             _graphics.PreferredBackBufferHeight = 1000;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
         }
 
         protected override void Initialize()
         {
             GumUi.Initialize(this, DefaultVisualsVersion.V2);
 
+            compareItem = new ComparisonItem(GraphicsDevice);
             
+
             FrameworkElement.KeyboardsForUiControl.Add(GumUi.Keyboard);
             //Gum.EnableProjectWideKeyboardSupport();
 
@@ -100,6 +107,8 @@ namespace wpf_to_gum
             SplitterExamples(mainPanelFarRight);
 
             VisualListExample(mainPanelFarRight2);
+
+            AddCompareButton(mainPanelFarRight2);
 
 
             //Styling.Colors.Primary = new Color(255, 0, 0);
@@ -1136,15 +1145,17 @@ namespace wpf_to_gum
             }
         }
 
+        
         private void VisualListExample(StackPanel panelToAddTo)
         {
             //var myTexture = Texture2D.FromFile(GraphicsDevice, "Content/quickTexture.png");
             //var myStyle = new Styling(myTexture);
-            //myStyle.NineSlice.Bordered = Styling.CreateTextureCoordinateState(0, 0, 96, 32, myTexture);
+            ////Styling.UpdateTexturePosition(myStyle.NineSlice.Bordered, 0, 0, 96, 32);
             //var mySingleTextureRegion = Styling.CreateTextureCoordinateState(96, 48, 32, 32, myTexture);
 
             //var background = new NineSliceRuntime();
-            //background.ApplyState(Styling.ActiveStyle.NineSlice.Bordered);
+            ////background.ApplyState(myStyle.NineSlice.Bordered);
+            //background.ApplyState(mySingleTextureRegion);
             ////background.Texture = Styling.ActiveStyle.SpriteSheet;
             //background.Dock(Dock.Fill);
 
@@ -1192,6 +1203,28 @@ namespace wpf_to_gum
                 item.ItemBuy.Click += (a, b) => { label.Text = item.ItemName.Text; };
                 scrollViewer.AddChild(item);
             };
+        }
+
+        private void AddCompareButton(StackPanel panelToAddTo)
+        {
+            var panel = new StackPanel();
+            panelToAddTo.AddChild(panel);
+
+            var label = new Label();
+            label.Text = "Press S to save the screen";
+            panelToAddTo.AddChild(label);
+
+            label = new Label();
+            label.Text = "Press L to load the last saved image";
+            panelToAddTo.AddChild(label);
+
+            label = new Label();
+            label.Text = "Press C to compare the images";
+            panelToAddTo.AddChild(label);
+
+            label = new Label();
+            label.Text = "Press D to delete the results";
+            panelToAddTo.AddChild(label);
         }
 
 
@@ -1272,7 +1305,46 @@ namespace wpf_to_gum
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            GumUi.Update(gameTime);   
+            var pressedKeys = Keyboard.GetState().GetPressedKeys();
+            foreach (var key in pressedKeys)
+            {
+                if (key == Keys.S)
+                {
+                    if (compareItem != null && compareItem.NewImage != null)
+                    {
+                        using (var stream = File.Create("goodImage.png"))
+                        {
+                            compareItem.NewImage.SaveAsPng(stream, compareItem.NewImage.Width, compareItem.NewImage.Height);
+                        }
+                    }
+                }
+
+                if (key == Keys.L)
+                {
+                    if (compareItem != null)
+                    {
+                        compareItem.GoodImage = Texture2D.FromStream(GraphicsDevice, File.OpenRead("goodImage.png"));
+                    }
+                }
+
+                if (key == Keys.C)
+                {
+                    if (compareItem != null)
+                    {
+                        compareItem.GenerateResultsImage();
+                    }
+                }
+
+                if (key == Keys.D)
+                {
+                    if (compareItem != null)
+                    {
+                        compareItem.ResultsImage = null;
+                    }
+                }
+            }
+
+            GumUi.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -1282,6 +1354,16 @@ namespace wpf_to_gum
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             GumUi.Draw();
+
+            compareItem.GetCurrentScreenImage();
+
+            if (compareItem != null && compareItem.ResultsImage != null)
+            {
+                GraphicsDevice.Clear(Color.CornflowerBlue);
+                _spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.Opaque);
+                _spriteBatch.Draw(compareItem.ResultsImage, Vector2.Zero, Color.White);
+                _spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }
