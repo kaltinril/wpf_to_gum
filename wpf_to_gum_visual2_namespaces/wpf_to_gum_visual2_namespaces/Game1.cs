@@ -28,7 +28,7 @@ namespace wpf_to_gum
         private SpriteBatch _spriteBatch;
         GumService GumUi => GumService.Default;
 
-        ComparisonItem compareItem;
+        ComparisonManager compareManager;
 
         public Game1()
         {
@@ -44,14 +44,16 @@ namespace wpf_to_gum
         {
             GumUi.Initialize(this, DefaultVisualsVersion.V2);
 
-            compareItem = new ComparisonItem(GraphicsDevice);
-            
+            compareManager = new ComparisonManager(GraphicsDevice);
+
+            Debug.WriteLine("name" + GumService.Default.Root.Name);
 
             FrameworkElement.KeyboardsForUiControl.Add(GumUi.Keyboard);
             //Gum.EnableProjectWideKeyboardSupport();
 
             // Create the main panel that everything is added to
             var mainPanel = new StackPanel();
+            mainPanel.Name = "mainPanel";
             mainPanel.Visual.X = 10;
             mainPanel.Visual.Y = 10;
             mainPanel.Spacing = 5;
@@ -60,28 +62,34 @@ namespace wpf_to_gum
             // Create a sub-panel that is stacked LEFT-TO-RIGHT
             var leftToRight = new StackPanel();
             leftToRight.Spacing = 20;
+            leftToRight.Name = "leftToRight";
             leftToRight.Visual.ChildrenLayout = ChildrenLayout.LeftToRightStack;
             mainPanel.AddChild(leftToRight);
 
             // Add 3 stack panel "columns"
             var mainPanelLeft = new StackPanel();
             mainPanelLeft.Spacing = 5;
+            mainPanelLeft.Name = "mainPanelLeft";
             leftToRight.AddChild(mainPanelLeft);
 
             var mainPanelMiddle = new StackPanel();
             mainPanelMiddle.Spacing = 5;
+            mainPanelMiddle.Name = "mainPanelMiddle";
             leftToRight.AddChild(mainPanelMiddle);
 
             var mainPanelRight = new StackPanel();
             mainPanelRight.Spacing = 5;
+            mainPanelRight.Name = "mainPanelRight";
             leftToRight.AddChild(mainPanelRight);
 
             var mainPanelFarRight = new StackPanel();
             mainPanelFarRight.Spacing = 5;
+            mainPanelFarRight.Name = "mainPanelFarRight";
             leftToRight.AddChild(mainPanelFarRight);
 
             var mainPanelFarRight2 = new StackPanel();
             mainPanelFarRight2.Spacing = 5;
+            mainPanelFarRight2.Name = "mainPanelFarRight2";
             leftToRight.AddChild(mainPanelFarRight2);
 
             // Perform different WPF like actions
@@ -1008,14 +1016,17 @@ namespace wpf_to_gum
             var panel = new StackPanel();
             panel.Spacing = 2;
             panel.Visual.Width = 200;
+            panel.Name = "windowExampleStackPanel";
             panelToAddTo.AddChild(panel);
 
             var window = new Window();
             //window.Width = 200;
+            window.Name = "window";
             panelToAddTo.AddChild(window);
 
             var textInstance = new Label();
             textInstance.Dock(Dock.Top);
+            textInstance.Name = "textInstance";
             //textInstance.Anchor(Anchor.Top);
             textInstance.Y = 24;
             textInstance.Text = "Hello I am a message box";
@@ -1025,6 +1036,7 @@ namespace wpf_to_gum
             button.Anchor(Anchor.Bottom);
             button.Y = -10;
             button.Text = "Close";
+            button.Name = "CloseButton";
             window.AddChild(button.Visual);
             button.Click += (_, _) =>
             {
@@ -1219,7 +1231,23 @@ namespace wpf_to_gum
             panelToAddTo.AddChild(label);
 
             label = new Label();
+            label.Text = "Press O to open the Data for the compare";
+            panelToAddTo.AddChild(label);
+
+            label = new Label();
+            label.Text = "Press B to build the compare list";
+            panelToAddTo.AddChild(label);
+
+            label = new Label();
+            label.Text = "Press I to save the Data for the compare";
+            panelToAddTo.AddChild(label);
+
+            label = new Label();
             label.Text = "Press C to compare the images";
+            panelToAddTo.AddChild(label);
+
+            label = new Label();
+            label.Text = "Press M to save the Moved data from the compare";
             panelToAddTo.AddChild(label);
 
             label = new Label();
@@ -1310,38 +1338,70 @@ namespace wpf_to_gum
             {
                 if (key == Keys.S)
                 {
-                    if (compareItem != null && compareItem.NewImage != null)
+                    if (compareManager != null && compareManager.NewImage != null)
                     {
                         using (var stream = File.Create("goodImage.png"))
                         {
-                            compareItem.NewImage.SaveAsPng(stream, compareItem.NewImage.Width, compareItem.NewImage.Height);
+                            compareManager.NewImage.SaveAsPng(stream, compareManager.NewImage.Width, compareManager.NewImage.Height);
                         }
                     }
                 }
 
                 if (key == Keys.L)
                 {
-                    if (compareItem != null)
+                    if (compareManager != null)
                     {
-                        compareItem.GoodImage = Texture2D.FromStream(GraphicsDevice, File.OpenRead("goodImage.png"));
+                        compareManager.GoodImage = Texture2D.FromStream(GraphicsDevice, File.OpenRead("goodImage.png"));
+                    }
+                }
+
+                if (key == Keys.B)
+                {
+                    if (compareManager != null)
+                    {
+                        compareManager.BuildComparisonItemsList(GumService.Default.Root);
                     }
                 }
 
                 if (key == Keys.C)
                 {
-                    if (compareItem != null)
+                    if (compareManager != null)
                     {
-                        compareItem.GenerateResultsImage();
+                        compareManager.GenerateResultsImage();
                     }
                 }
 
                 if (key == Keys.D)
                 {
-                    if (compareItem != null)
+                    if (compareManager != null)
                     {
-                        compareItem.ResultsImage = null;
+                        compareManager.ResultsImage = null;
                     }
                 }
+
+                if (key == Keys.O)
+                {
+                    if (compareManager != null)
+                    {
+                        compareManager.LoadComparisonList("originalItems.json");
+                    }
+                }
+
+                if (key == Keys.I)
+                {
+                    if (compareManager != null)
+                    {
+                        compareManager.SaveComparisonList("originalItems.json");
+                    }
+                }
+                if (key == Keys.M)
+                {
+                    if (compareManager != null)
+                    {
+                        compareManager.SaveMovedList("movedItems.json");
+                    }
+                }
+
             }
 
             GumUi.Update(gameTime);
@@ -1355,13 +1415,13 @@ namespace wpf_to_gum
 
             GumUi.Draw();
 
-            compareItem.GetCurrentScreenImage();
+            compareManager.GetCurrentScreenImage();
 
-            if (compareItem != null && compareItem.ResultsImage != null)
+            if (compareManager != null && compareManager.ResultsImage != null)
             {
                 GraphicsDevice.Clear(Color.CornflowerBlue);
                 _spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.Opaque);
-                _spriteBatch.Draw(compareItem.ResultsImage, Vector2.Zero, Color.White);
+                _spriteBatch.Draw(compareManager.ResultsImage, Vector2.Zero, Color.White);
                 _spriteBatch.End();
             }
 
